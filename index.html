@@ -1,0 +1,177 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data Mahasiswa</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- DataTables -->
+  <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+</head>
+
+<body>
+  <!--Navbar-->
+  <nav class="navbar navbar-expand-lg navbar-container">
+    <div class="container d-flex justify-content-center">
+      <a class="dataMahasiswa" href="" style="font-size: 2rem; color: white; text-decoration: none; font-weight: 700;">Data Mahasiswa</a>
+    </div>
+  </nav>
+
+  <!--LogIn-->
+  <div class="first-page mt-4" id="login">
+    <h2 class="text-center">Please Log in!</h2>
+    <div class="d-flex justify-content-center">
+      <form action="" onsubmit="event.preventDefault()" class="w-100 w-md-50">
+        <div class="form-floating mb-4">
+          <input type="text" name="username" required placeholder="Username" id="username"
+            class="form-control w-full" />
+          <label for="username">Your Name</label>
+        </div>
+        <div class="d-grid gap-2 col-6 mx-auto">
+          <button type="submit" class="btn btn-primary" id="login-button">Login</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!--Table-->
+  <div class="container table-container" id="main" style="display: none">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start aligm-items-md-center mt-3">
+      <div>
+        <h1>Hello, <span id="username-label"></span>!</h1>
+      </div>
+      <div>
+        <h3 id="clock"></h3>
+      </div>
+    </div>
+    <hr />
+    <p>
+      Usaha keras tidak akan mengkhianati hasil, tapi bisa mengkhianati
+      impian.
+    </p>
+    <hr />
+    <form id="insertDataForm" onsubmit="event.preventDefault()">
+      <div class="row mb-3">
+        <label for="nim" class="col-sm-2 col-form-label">NIM</label>
+        <div class="col-sm-10">
+          <input placeholder="Nomor Induk Mahasiswa" type="text" class="form-control" id="nim" />
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label for="nama" class="col-sm-2 col-form-label">Nama Lengkap</label>
+        <div class="col-sm-10">
+          <input placeholder="Nama lengkap" type="text" class="form-control" id="nama" />
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label for="alamat" class="col-sm-2 col-form-label">Alamat</label>
+        <div class="col-sm-10">
+          <input placeholder="Alamat Tempat Tinggal Asal" type="text" class="form-control" id="alamat" />
+        </div>
+      </div>
+      <div class="d-flex justify-content-end">
+        <button type="reset" class="btn btn-danger me-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z" />
+            <path
+              d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466" />
+          </svg>
+          Reset
+        </button>
+        <button type="submit" id="insert-data" class="btn btn-success">
+          +Tambah
+        </button>
+      </div>
+    </form>
+
+    <div id="tableData" style="display: none" class="mt-4">
+      <h2>Data Mahasiswa</h2>
+      <table id="table" class="table table-responsive table-striped w-full" style="width: 100%">
+        <thead>
+          <tr>
+            <th>NIM</th>
+            <th>Nama</th>
+            <th>Alamat</th>
+            <th>Pengaturan</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+      <div class="modal fade" id="editDataModal" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel" style="color: black;">
+                Edit Data
+              </h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="editDataForm" onsubmit="event.preventDefault()">
+              <input type="hidden" id="editIndex">
+              <div class="modal-body" style="color: black;">
+                <div class="row mb-3">
+                  <label for="nim" class="col-sm-4 col-form-label">NIM</label>
+                  <div class="col-sm-8">
+                    <input placeholder="Nomor Induk Mahasiswa" type="text" disabled class="form-control"
+                      id="edit-nim" />
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="nama" class="col-sm-4 col-form-label">Nama Lengkap</label>
+                  <div class="col-sm-8">
+                    <input placeholder="Nama lengkap" type="text" class="form-control" id="edit-nama" />
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="alamat" class="col-sm-4 col-form-label">Alamat</label>
+                  <div class="col-sm-8">
+                    <input placeholder="Alamat Tempat Tinggal Asal" type="text" class="form-control" id="edit-alamat" />
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x"
+                    viewBox="0 0 16 16">
+                    <path
+                      d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+                  </svg>
+                  Cancel
+                </button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="update">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-floppy" viewBox="0 0 16 16">
+                    <path d="M11 2H9v3h2z" />
+                    <path
+                      d="M1.5 0h11.586a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 14.5v-13A1.5 1.5 0 0 1 1.5 0M1 1.5v13a.5.5 0 0 0 .5.5H2v-4.5A1.5 1.5 0 0 1 3.5 9h9a1.5 1.5 0 0 1 1.5 1.5V15h.5a.5.5 0 0 0 .5-.5V2.914a.5.5 0 0 0-.146-.353l-1.415-1.415A.5.5 0 0 0 13.086 1H13v4.5A1.5 1.5 0 0 1 11.5 7h-7A1.5 1.5 0 0 1 3 5.5V1H1.5a.5.5 0 0 0-.5.5m3 4a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5V1H4zM3 15h10v-4.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5z" />
+                  </svg>
+                  Save!
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr />
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+    integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+    crossorigin="anonymous"></script>
+
+  <!-- DataTables -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.datatables.net/2.0.2/js/dataTables.js"></script>
+  <script src="https://cdn.datatables.net/2.0.2/js/dataTables.bootstrap5.js"></script>
+
+  <!-- SweetAlert -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- External script -->
+  <script src="script.js"></script>
+</body>
+
+</html>
